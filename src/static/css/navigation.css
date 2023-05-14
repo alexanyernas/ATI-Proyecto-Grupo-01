@@ -1,0 +1,62 @@
+.container {
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    margin-top: 80px;
+  }
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  color: #6C757d !important;
+  padding: 0.5rem 1rem;
+}
+
+.offcanvas-header {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.offcanvas-title {
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.navbar-nav {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.btn-close {
+  padding: 0.5rem 0.5rem;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 100;
+  padding-top: 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #e5e5e5 #f8f9fa;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background-color: #f8f9fa;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #e5e5e5;
+}

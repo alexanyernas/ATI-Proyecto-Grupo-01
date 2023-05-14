@@ -1,14 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <title>Inicio de Sesión - Trivias UCV</title>
-</head>
-<body>
-    <h1>Login Page</h1>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-</body>
-</html>
+{% extends "layout/baseAuth.html" %}
+
+{% block content %}
+<form action="" method="post" class="row custom-width mx-auto">
+    <div class="col-12 mb-4">
+        <input 
+            name="alias"
+            type="text" 
+            class="form-control form-control-md" 
+            placeholder="Alias"
+        >
+    </div>
+    <div class="col-12 input-group">
+        <input
+            name="password" 
+            type="password" 
+            class="form-control form-control-md" 
+            placeholder="Contraseña"
+        >
+        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+            <i class="bi bi-eye"></i>
+        </button>
+    </div>
+    <div class="col-12 text-center mt-4">
+        <button 
+            type="submit" 
+            class="btn text-white mb-5 px-4 bg-secondary"
+        >
+            Ingresar
+        </button>
+    </div>
+</form>
+
+<div class="row text-center g-3 mb-5 mx-auto">
+    <div class="col-12">
+        <button class="btn btn-outline-secondary custom-width" style="border-radius: 20px">
+            <i class="bi bi-twitter"></i> Conectar con Twitter
+        </button>
+    </div>
+    <div class="col-12">
+        <button class="btn btn-outline-secondary custom-width" style="border-radius: 20px">
+            <i class="bi bi-facebook"></i> Conectar con Facebook
+        </button>
+    </div>
+</div>
+
+<div class="row text-center g-3">
+    <div class="col-12">
+        <a class="text-secondary" href="{{ url_for('forget_password_controller') }}">¿Olvído su Contraseña?</a>
+    </div>
+    <div class="col-12">
+        <a class="text-secondary" href="{{ url_for('register_controller') }}">Regístrese Aquí</a>
+    </div>
+</div>
+{% endblock %}

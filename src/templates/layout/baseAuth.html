@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/poppins.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .custom-width {
+            width: 50%;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .custom-width {
+                width: 100%;
+            }
+        }
+    </style>
+    <title>{{ gettext(title) }}</title>
+</head>
+<body>
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh">
+        <div class="p-5">
+            <div class="text-center">
+                <img src="https://placehold.jp/120x100.png" alt="Logo" class="mb-4">
+                <h2 class="fw-bold my-4">{{ gettext(principal_title) }}</h2>
+            </div>
+
+            {% block content %}{% endblock %}
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</body>
+</html>

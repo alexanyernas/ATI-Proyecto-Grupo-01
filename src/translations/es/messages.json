@@ -1,0 +1,20 @@
+{
+    "auth": {
+        "login": {
+            "title": "Inicio de Sesión - Trivias UCV",
+            "principal_title": "Bienvenid@"
+        },
+        "register": {
+            "title": "Registro - Trivias UCV",
+            "principal_title": "Regístrate" 
+        },
+        "forget-password": {
+            "title": "Recuperar Contraseña - Trivias UCV",
+            "principal_title": "Recuperar Contraseña" 
+        },
+        "new-password": {
+            "title": "Recuperar Contraseña - Trivias UCV",
+            "principal_title": "Bienvenid@ de Nuevo" 
+        }
+    }
+}
