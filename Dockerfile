@@ -8,6 +8,9 @@ WORKDIR /myWorkDir
 COPY requirements.txt .
 COPY /src /myWorkDir/src
 
+# Actualizar pip 
+RUN python -m pip install --upgrade pip
+
 # Instalar las dependencias
 RUN pip install -r requirements.txt
 
