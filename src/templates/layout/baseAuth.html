@@ -18,14 +18,14 @@
             }
         }
     </style>
-    <title>{{ gettext(title) }}</title>
+    <title>{{ title }}</title>
 </head>
 <body>
     <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh">
         <div class="p-5">
             <div class="text-center">
                 <img src="https://placehold.jp/120x100.png" alt="Logo" class="mb-4">
-                <h2 class="fw-bold my-4">{{ gettext(principal_title) }}</h2>
+                <h2 class="fw-bold my-4">{{ principal_title }}</h2>
             </div>
 
             {% block content %}{% endblock %}

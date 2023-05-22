@@ -1,19 +1,19 @@
-from flask_babel import Babel
-from flask import Flask, render_template, request
+# from flask_babel import Babel
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
-app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
-app.config['BABEL_DEFAULT_LOCALE']          = 'es'
-app.config['LANGUAGES']                     = {
-    'es': 'Español',
-    'en': 'English'
-}
+# app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
+# app.config['BABEL_DEFAULT_LOCALE']          = 'es'
+# app.config['LANGUAGES']                     = {
+#     'es': 'Español',
+#     'en': 'English'
+# }
 
-def get_locale():
-    return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
+# def get_locale():
+#     return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
 
-babel = Babel(app, locale_selector = get_locale)
+# babel = Babel(app, locale_selector = get_locale)
 
 # MAIN PAGES
 @app.route('/')
