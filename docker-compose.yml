@@ -1,20 +1,23 @@
 version: "3.9"
 
 services:
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    restart: always
-    volumes:
-      - ./data:/data/db
-    expose:
-      - 27017
-  
-  python-flask:
+  app:
     build: .
-    container_name: python-flask
-    restart: always
+    command: python -u src/app.py
     ports:
       - "5000:5000"
-    depends_on:
-      - mongo
+    volumes:
+      - .:/app
+    links:
+      - db
+  db:
+    image: mongo:latest
+    hostname: test_mongodb
+    environment:
+      - MONGO_INITDB_DATABASE=bd_trivia
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - ./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
+    ports:
+      - 27017:27017

@@ -1,7 +1,20 @@
 # from flask_babel import Babel
 from flask import Flask, render_template
+from flask import Flask, jsonify
+import pymongo
+from pymongo import MongoClient
 
 app = Flask(__name__)
+
+def get_db():
+    client = MongoClient(host='test_mongodb',
+                         port=27017, 
+                         username='root', 
+                         password='pass',
+                        authSource="admin")
+    db = client["bd_trivia"]
+    return db
+
 
 # app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
 # app.config['BABEL_DEFAULT_LOCALE']          = 'es'
@@ -75,6 +88,25 @@ def new_password_controller():
     title           = 'Recuperar Contraseña - Trivias UCV'
     principal_title = 'Bienvenid@ de Nuevo'
     return render_template('auth/newPasswordPage.html', title = title, principal_title = principal_title)
+
+@app.route('/usuarios')
+def get_stored_usuarios():
+    db = get_db()
+    _usuarios = db.usuario_tb.find()
+    usuarios = [{"id_user": usuario["id_user"], 
+                 "name_user": usuario["name_user"], 
+                 "alias": usuario["alias"], 
+                 "email": usuario["email"], 
+                 "fec_creacion": usuario["fec_creacion"], 
+                 "fec_nacimiento": usuario["fec_nacimiento"], 
+                 "facebook": usuario["facebook"], 
+                 "twitter": usuario["twitter"], 
+                 "tipo_usuario": usuario["tipo_usuario"], 
+                 "posicion_ranking": usuario["posicion_ranking"], 
+                 "imagen": usuario["imagen"], 
+                 "puntaje": usuario["puntaje"], 
+                 "ganador_sorteo": usuario["ganador_sorteo"]} for usuario in _usuarios]
+    return jsonify({"usuarios": usuarios})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
