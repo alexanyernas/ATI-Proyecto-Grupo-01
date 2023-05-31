@@ -1,68 +1,28 @@
 {% extends "layout/baseAuth.html" %}
 
 {% block content %}
-<form action="" method="post" class="row custom-width mx-auto">
+<form action="/auth/register" method="post" class="row custom-width mx-auto">
+    {{ form.csrf_token }}
     <div class="col-12 mb-4">
-        <input 
-            name="first_name"
-            type="text" 
-            class="form-control form-control-md" 
-            placeholder="Nombre"
-        >
+        {{ form.first_name(class="form-control form-control-md", placeholder="Nombre") }}
     </div>
     <div class="col-12 mb-4">
-        <input 
-            name="last_name"
-            type="text" 
-            class="form-control form-control-md" 
-            placeholder="Apellido"
-        >
+        {{ form.last_name(class="form-control form-control-md", placeholder="Apellido") }}
     </div>
     <div class="col-12 mb-4">
-        <input 
-            name="alias"
-            type="text" 
-            class="form-control form-control-md" 
-            placeholder="Alias"
-        >
+        {{ form.alias(class="form-control form-control-md", placeholder="Alias") }}
     </div>
     <div class="col-12 mb-4">
-        <input 
-            name="phone"
-            type="text" 
-            class="form-control form-control-md" 
-            placeholder="Número de Teléfono"
-        >
+        {{ form.phone(class="form-control form-control-md", placeholder="Número de Teléfono") }}
     </div>
     <div class="col-12 mb-4">
-        <input 
-            name="email"
-            type="text" 
-            class="form-control form-control-md" 
-            placeholder="Correo Electrónico"
-        >
+        {{ form.email(class="form-control form-control-md", placeholder="Correo Electrónico") }}
     </div>
     <div class="col-12 input-group mb-4">
-        <input 
-            name="password"
-            type="password" 
-            class="form-control form-control-md" 
-            placeholder="Contraseña"
-        >
-        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-            <i class="bi bi-eye"></i>
-        </button>
+        {{ form.password(class="form-control form-control-md", placeholder="Contraseña") }}
     </div>
     <div class="col-12 input-group">
-        <input 
-            name="confirm_password" 
-            type="password" 
-            class="form-control form-control-md" 
-            placeholder="Confirmar Contraseña"
-        >
-        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-            <i class="bi bi-eye"></i>
-        </button>
+        {{ form.confirm_password(class="form-control form-control-md", placeholder="Confirmar Contraseña") }}
     </div>
     <div class="col-12 text-center mt-4">
         <button 

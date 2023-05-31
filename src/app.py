@@ -1,10 +1,21 @@
-# from flask_babel import Babel
-from flask import Flask, render_template
-from flask import Flask, jsonify
-import pymongo
 from pymongo import MongoClient
+from flask import Flask, redirect, render_template, request, url_for, jsonify
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+
+# Forms Validation
+from forms.register import RegistrationForm
+from forms.login import LoginForm
+from forms.forgetPassword import ForgetPasswordForm
+from forms.newPassword import NewPasswordForm
+
+# Models
+from models.user import User
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '0ZeX5A9qzA'
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 def get_db():
     client = MongoClient(host='test_mongodb',
@@ -15,79 +26,152 @@ def get_db():
     db = client["bd_trivia"]
     return db
 
+def inject_user():
+    return dict(current_user=current_user)
 
-# app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
-# app.config['BABEL_DEFAULT_LOCALE']          = 'es'
-# app.config['LANGUAGES']                     = {
-#     'es': 'Español',
-#     'en': 'English'
-# }
-
-# def get_locale():
-#     return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
-
-# babel = Babel(app, locale_selector = get_locale)
+app.context_processor(inject_user)
 
 # MAIN PAGES
 @app.route('/')
 def home_controller():
     title = 'Inicio - Trivias UCV'
-    return render_template('home/homePage.html', title = title)
+    return render_template(
+        'home/homePage.html', 
+        title = title
+    )
 
 @app.route('/play')
+@login_required
 def play_controller():
     title = 'Jugar - Trivias UCV'
-    return render_template('play/playPage.html', title = title)
+    return render_template(
+        'play/playPage.html', 
+        title = title
+    )
 
 @app.route('/rankings')
+@login_required
 def rankings_controller():
     title = 'Rankings - Trivias UCV'
-    return render_template('rankings/rankingsPage.html', title = title)
+    return render_template(
+        'rankings/rankingsPage.html', 
+        title = title
+    )
 
 @app.route('/awards')
+@login_required
 def awards_controller():
     title = 'Premios - Trivias UCV'
-    return render_template('awards/awardsPage.html', title = title)
+    return render_template(
+        'awards/awardsPage.html', 
+        title = title
+    )
 
 @app.route('/profile')
+@login_required
 def profile_controller():
     title = 'Perfil - Trivias UCV'
-    return render_template('profile/profilePage.html', title = title)
+    return render_template(
+        'profile/profilePage.html', 
+        title = title
+    )
 
 @app.route('/settings')
+@login_required
 def settings_controller():
     title = 'Configuración - Trivias UCV'
-    return render_template('settings/settingsPage.html', title = title)
+    return render_template(
+        'settings/settingsPage.html', 
+        title = title
+    )
 
 @app.route('/help')
 def help_controller():
     title = 'Ayuda - Trivias UCV'
-    return render_template('help/helpPage.html', title = title)
+    return render_template(
+        'help/helpPage.html', 
+        title = title
+    )
+
+# USERS
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 # AUTH PAGES
-@app.route('/auth/login')
+@app.route('/auth/login', methods=['GET', 'POST'])
 def login_controller():
     title           = 'Iniciar Sesión - Trivias UCV'
     principal_title = 'Bienvenid@'
-    return render_template('auth/loginPage.html', title = title, principal_title = principal_title)
 
-@app.route('/auth/register')
+    form = LoginForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        # alias = form.alias.data
+        # password = form.password.data
+        user = User.get(2)
+        if user: 
+            login_user(user)
+            return redirect(url_for('home_controller')) 
+    
+    return render_template(
+        'auth/loginPage.html', 
+        title = title, 
+        principal_title = principal_title, 
+        form = form
+    )
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login_controller'))
+
+@app.route('/auth/register', methods=['GET', 'POST'])
 def register_controller():
     title           = 'Registro - Trivias UCV'
     principal_title = 'Regístrate'
-    return render_template('auth/registerPage.html', title = title, principal_title = principal_title)
 
-@app.route('/auth/forget-password')
+    form = RegistrationForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        return redirect(url_for('login_controller'))
+    
+    return render_template(
+        'auth/registerPage.html', 
+        title = title, 
+        principal_title = principal_title, 
+        form = form
+    )
+
+@app.route('/auth/forget-password', methods=['GET', 'POST'])
 def forget_password_controller():
     title           = 'Recuperar Contraseña - Trivias UCV'
     principal_title = 'Recuperar Contraseña'
-    return render_template('auth/forgetPasswordPage.html', title = title, principal_title = principal_title)
 
-@app.route('/auth/new-password')
+    form = ForgetPasswordForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        return redirect(url_for('new_password_controller'))
+    
+    return render_template(
+        'auth/forgetPasswordPage.html', 
+        title = title, 
+        principal_title = principal_title, 
+        form = form
+    )
+
+@app.route('/auth/new-password', methods=['GET', 'POST'])
 def new_password_controller():
     title           = 'Recuperar Contraseña - Trivias UCV'
     principal_title = 'Bienvenid@ de Nuevo'
-    return render_template('auth/newPasswordPage.html', title = title, principal_title = principal_title)
+
+    form = NewPasswordForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        return redirect(url_for('login_controller'))
+    
+    return render_template(
+        'auth/newPasswordPage.html', 
+        title = title, 
+        principal_title = principal_title, 
+        form = form
+    )
 
 @app.route('/usuarios')
 def get_stored_usuarios():
@@ -108,5 +192,6 @@ def get_stored_usuarios():
                  "ganador_sorteo": usuario["ganador_sorteo"]} for usuario in _usuarios]
     return jsonify({"usuarios": usuarios})
 
+# MAIN
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

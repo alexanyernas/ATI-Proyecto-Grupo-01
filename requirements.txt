@@ -1,3 +1,5 @@
 flask
 Flask-Babel
 pymongo
+Flask-WTF
+flask-login

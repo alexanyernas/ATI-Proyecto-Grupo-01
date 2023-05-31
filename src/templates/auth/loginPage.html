@@ -1,25 +1,13 @@
 {% extends "layout/baseAuth.html" %}
 
 {% block content %}
-<form action="" method="post" class="row custom-width mx-auto">
+<form action="/auth/login" method="post" class="row custom-width mx-auto">
+    {{ form.csrf_token }}
     <div class="col-12 mb-4">
-        <input 
-            name="alias"
-            type="text" 
-            class="form-control form-control-md" 
-            placeholder="Alias"
-        >
+        {{ form.alias(class="form-control form-control-md", placeholder="Alias") }}
     </div>
     <div class="col-12 input-group">
-        <input
-            name="password" 
-            type="password" 
-            class="form-control form-control-md" 
-            placeholder="Contraseña"
-        >
-        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-            <i class="bi bi-eye"></i>
-        </button>
+        {{ form.password(class="form-control form-control-md", placeholder="Contraseña") }}
     </div>
     <div class="col-12 text-center mt-4">
         <button 
