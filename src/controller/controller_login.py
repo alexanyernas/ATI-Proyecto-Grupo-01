@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from flask import Flask, redirect, render_template, request, url_for, jsonify
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from config.mongodb import ConexionMongo
 
 # Forms Validation
 from forms.register import RegistrationForm
@@ -17,14 +18,7 @@ app.config['SECRET_KEY'] = '0ZeX5A9qzA'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-def ConexionMongo():
-    client = MongoClient(host='test_mongodb',
-                         port=27017, 
-                         username='root', 
-                         password='pass',
-                        authSource="admin")
-    db = client["bd_trivia"]
-    return db
+mdb = ConexionMongo().connect_mongo()
 
 def inject_user():
     return dict(current_user=current_user)
@@ -32,66 +26,6 @@ def inject_user():
 app.context_processor(inject_user)
 
 # MAIN PAGES
-@app.route('/')
-def home_controller():
-    title = 'Inicio - Trivias UCV'
-    return render_template(
-        'home/homePage.html', 
-        title = title
-    )
-
-@app.route('/play')
-@login_required
-def play_controller():
-    title = 'Jugar - Trivias UCV'
-    return render_template(
-        'play/playPage.html', 
-        title = title
-    )
-
-@app.route('/rankings')
-@login_required
-def rankings_controller():
-    title = 'Rankings - Trivias UCV'
-    return render_template(
-        'rankings/rankingsPage.html', 
-        title = title
-    )
-
-@app.route('/awards')
-@login_required
-def awards_controller():
-    title = 'Premios - Trivias UCV'
-    return render_template(
-        'awards/awardsPage.html', 
-        title = title
-    )
-
-@app.route('/profile')
-@login_required
-def profile_controller():
-    title = 'Perfil - Trivias UCV'
-    return render_template(
-        'profile/profilePage.html', 
-        title = title
-    )
-
-@app.route('/settings')
-@login_required
-def settings_controller():
-    title = 'Configuración - Trivias UCV'
-    return render_template(
-        'settings/settingsPage.html', 
-        title = title
-    )
-
-@app.route('/help')
-def help_controller():
-    title = 'Ayuda - Trivias UCV'
-    return render_template(
-        'help/helpPage.html', 
-        title = title
-    )
 
 # USERS
 @login_manager.user_loader
@@ -172,25 +106,6 @@ def new_password_controller():
         principal_title = principal_title, 
         form = form
     )
-
-@app.route('/usuarios')
-def get_stored_usuarios():
-    db = ConexionMongo()
-    _usuarios = db.usuario_tb.find()
-    usuarios = [{"id_user": usuario["id_user"], 
-                 "name_user": usuario["name_user"], 
-                 "alias": usuario["alias"], 
-                 "email": usuario["email"], 
-                 "fec_creacion": usuario["fec_creacion"], 
-                 "fec_nacimiento": usuario["fec_nacimiento"], 
-                 "facebook": usuario["facebook"], 
-                 "twitter": usuario["twitter"], 
-                 "tipo_usuario": usuario["tipo_usuario"], 
-                 "posicion_ranking": usuario["posicion_ranking"], 
-                 "imagen": usuario["imagen"], 
-                 "puntaje": usuario["puntaje"], 
-                 "ganador_sorteo": usuario["ganador_sorteo"]} for usuario in _usuarios]
-    return jsonify({"usuarios": usuarios})
 
 # MAIN
 if __name__ == '__main__':
