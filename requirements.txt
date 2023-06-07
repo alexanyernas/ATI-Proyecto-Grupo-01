@@ -3,4 +3,4 @@ Flask-Babel
 pymongo
 Flask-WTF
 flask-login
-email_validator
+email-validator
