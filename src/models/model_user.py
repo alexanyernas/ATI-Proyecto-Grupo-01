@@ -1,7 +1,14 @@
-from flask_login import UserMixin, jsonify
+import sys
+import os
+
+# Agregar el directorio raíz de tu proyecto a la ruta de importación
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from flask_login import UserMixin
+from flask import jsonify
 from config.mongodb import ConexionMongo
 
-class user():
+class User():
 
     db = ConexionMongo()
     mdb = db.connect_mongo()
