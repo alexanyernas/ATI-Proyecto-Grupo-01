@@ -1,7 +1,7 @@
 from pymongo import MongoClient
-from flask import Flask, redirect, render_template, request, url_for, jsonify
+from flask import Flask, redirect, render_template, request, url_for, jsonify, make_response
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-from config.mongodb import ConexionMongo
+import requests
 
 # Forms Validation
 from forms.register import RegistrationForm
@@ -18,7 +18,21 @@ app.config['SECRET_KEY'] = '0ZeX5A9qzA'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-mdb = ConexionMongo().connect_mongo()
+fb_app_id = '127790393617638'
+fb_app_secret = '9b8442d20ed674199f0b6b8a8b6528cb'
+fb_redirect_uri = 'http://localhost:5000/login/facebook/callback'
+
+def ConexionMongo():
+    client = MongoClient(host='test_mongodb',
+                         port=27017, 
+                         username='root', 
+                         password='pass',
+                        authSource="admin")
+    db = client["bd_trivia"]
+    return db
+
+bdm = ConexionMongo()
+users_collection = bdm['usuario_tb']
 
 def inject_user():
     return dict(current_user=current_user)
@@ -26,6 +40,69 @@ def inject_user():
 app.context_processor(inject_user)
 
 # MAIN PAGES
+@app.route('/')
+def home_controller():
+    title = 'Inicio - Trivias UCV'
+    return render_template(
+        'home/homePage.html', 
+        title = title
+    )
+
+@app.route('/login/facebook')
+def login_facebook():
+    params = {
+        'client_id': fb_app_id,
+        'redirect_uri': fb_redirect_uri,
+        'scope': 'email',
+    }
+    return redirect('https://www.facebook.com/v12.0/dialog/oauth' + '?' + urlencode(params))
+
+@app.route('/login/facebook/callback')
+def login_facebook_callback():
+    code = request.args.get('code')
+    if not code:
+        return 'Error: No authorization code received'
+
+    params = {
+        'client_id': fb_app_id,
+        'client_secret': fb_app_secret,
+        'redirect_uri': fb_redirect_uri,
+        'code': code,
+    }
+
+    response = requests.get('https://graph.facebook.com/v12.0/oauth/access_token', params=params).json()
+    if 'access_token' not in response:
+        return 'Error: Access token not found in response'
+
+    access_token = response['access_token']
+
+    response = requests.get('https://graph.facebook.com/v12.0/me', params={'access_token': access_token}).json()
+    if 'id' not in response:
+        return 'Error: User ID not found in response'
+
+    user_id = response['id']
+    user_email = response.get('email', '')
+    user_name = response.get('name', '')
+
+    user = users_collection.find_one({'facebook_id': user_id})
+    if not user:
+        user = {
+            'facebook_id': user_id,
+            'name': user_name,
+            'email': user_email,
+        }
+        users_collection.insert_one(user)
+
+    response = make_response(redirect('/'))
+    response.set_cookie('user_id', str(user['_id']))
+    return response
+
+@app.route('/logout')
+def logout():
+    response = make_response(redirect('/'))
+    response.delete_cookie('user_id')
+    return response
+
 
 # USERS
 @login_manager.user_loader
@@ -106,6 +183,25 @@ def new_password_controller():
         principal_title = principal_title, 
         form = form
     )
+
+@app.route('/usuarios')
+def get_stored_usuarios():
+    db = ConexionMongo()
+    _usuarios = db.usuario_tb.find()
+    usuarios = [{"id_user": usuario["id_user"], 
+                 "name_user": usuario["name_user"], 
+                 "alias": usuario["alias"], 
+                 "email": usuario["email"], 
+                 "fec_creacion": usuario["fec_creacion"], 
+                 "fec_nacimiento": usuario["fec_nacimiento"], 
+                 "facebook": usuario["facebook"], 
+                 "twitter": usuario["twitter"], 
+                 "tipo_usuario": usuario["tipo_usuario"], 
+                 "posicion_ranking": usuario["posicion_ranking"], 
+                 "imagen": usuario["imagen"], 
+                 "puntaje": usuario["puntaje"], 
+                 "ganador_sorteo": usuario["ganador_sorteo"]} for usuario in _usuarios]
+    return jsonify({"usuarios": usuarios})
 
 # MAIN
 if __name__ == '__main__':
