@@ -1,5 +1,75 @@
 {% extends "layout/base.html" %}
 
 {% block content %}
-<h1>Hello World!</h1>
-{% endblock %}
+<div>
+    <h1>¡Bienvenido, alegiannattasio!</h1>
+    <p>Coloca a prueba tus conocimientos con nuestras nuevas trivias</p>
+</div>
+
+<div class="row mb-4">
+
+    <div class="col-lg-4 col-sm-12 col-md-12 p-3">
+        <div class="card" id="game">
+            <img src="https://placehold.jp/120x100.png" class="card-img-top" alt="Option">
+            <div class="card-body">
+              <p class="card-text">Lorem Ipsum</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-12 col-md-12 p-3">
+        <div class="card">
+            <img src="https://placehold.jp/120x100.png" class="card-img-top" alt="Option">
+            <div class="card-body">
+              <p class="card-text">Lorem Ipsum</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-12 col-md-12 p-3">
+        <div class="card">
+            <img src="https://placehold.jp/120x100.png" class="card-img-top" alt="Option">
+            <div class="card-body">
+              <p class="card-text">Lorem Ipsum</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-12 col-md-12 p-3">
+        <div class="card">
+            <img src="https://placehold.jp/120x100.png" class="card-img-top" alt="Option">
+            <div class="card-body">
+              <p class="card-text">Lorem Ipsum</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-12 col-md-12 p-3">
+        <div class="card">
+            <img src="https://placehold.jp/120x100.png" class="card-img-top" alt="Option">
+            <div class="card-body">
+              <p class="card-text">Lorem Ipsum</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-12 col-md-12 p-3">
+        <div class="card">
+            <img src="https://placehold.jp/120x100.png" class="card-img-top" alt="Option">
+            <div class="card-body">
+              <p class="card-text">Lorem Ipsum</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const game = document.getElementById('game');
+    
+    game.addEventListener('click', () => {
+        window.open('http://127.0.0.1:5000/game', '_self');
+    });
+</script>
+
+{% endblock %} 

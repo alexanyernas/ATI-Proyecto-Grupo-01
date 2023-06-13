@@ -41,7 +41,6 @@ def home_controller():
     )
 
 @app.route('/play')
-@login_required
 def play_controller():
     title = 'Jugar - Trivias UCV'
     return render_template(
@@ -49,8 +48,15 @@ def play_controller():
         title = title
     )
 
+@app.route('/game')
+def quiz_controller():
+    title = 'Jugar - Trivias UCV'
+    return render_template(
+        'play/gamePage.html',
+        title = title
+    )
+
 @app.route('/rankings')
-@login_required
 def rankings_controller():
     title = 'Rankings - Trivias UCV'
     return render_template(
@@ -59,7 +65,6 @@ def rankings_controller():
     )
 
 @app.route('/awards')
-@login_required
 def awards_controller():
     title = 'Premios - Trivias UCV'
     return render_template(
@@ -68,7 +73,6 @@ def awards_controller():
     )
 
 @app.route('/profile')
-@login_required
 def profile_controller():
     title = 'Perfil - Trivias UCV'
     return render_template(
@@ -77,7 +81,6 @@ def profile_controller():
     )
 
 @app.route('/settings')
-@login_required
 def settings_controller():
     title = 'Configuración - Trivias UCV'
     return render_template(

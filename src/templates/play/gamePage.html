@@ -1,0 +1,40 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+<div>
+    <div>
+        <h4 class="text-center">Trivia</h4>
+        <p>¿Cuál es la capital de Venezuela?</p>
+    </div>
+
+    <div>
+        <form method="POST">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Los Teques
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Caracas
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                  San Antonio de Los Altos
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Carrizal
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Continuar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
